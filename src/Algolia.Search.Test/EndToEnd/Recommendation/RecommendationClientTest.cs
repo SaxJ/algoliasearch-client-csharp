@@ -58,7 +58,11 @@ namespace Algolia.Search.Test.EndToEnd.Recommendation
             {
                 BaseTest.RecommendationClient.SetPersonalizationStrategy(request);
             }
-            catch (AlgoliaApiException e) when (e.HttpErrorCode != 429)
+            catch (AlgoliaApiException e) when ((e.HttpErrorCode == 429) && (e.Message == "{\"status\":429,\"message\":\"Number of strategy saves exceeded for the day\"}"))
+            {
+                Assert.Ignore($"RecommendationClient.SetPersonalizationStrategy failure: HttpErrorCode: {e.HttpErrorCode}, HttpMessage {e.Message}");
+            }
+            catch (AlgoliaApiException e)
             {
                 Assert.Fail($"RecommendationClient.SetPersonalizationStrategy failure: HttpErrorCode: {e.HttpErrorCode}, HttpMessage {e.Message}");
             }
