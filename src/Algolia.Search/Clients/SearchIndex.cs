@@ -349,9 +349,13 @@ namespace Algolia.Search.Clients
         public async Task<BatchIndexingResponse> DeleteObjectsAsync(IEnumerable<string> objectIds,
             RequestOptions requestOptions = null, CancellationToken ct = default)
         {
-            if (objectIds == null || !objectIds.Any())
+            if (objectIds == null)
             {
                 throw new ArgumentNullException(nameof(objectIds));
+            }
+            if (objectIds.Any())
+            {
+                throw new ArgumentOutOfRangeException("Argument objectIds must not be empty");
             }
 
             var request = objectIds.Select(x => new Dictionary<string, string> { { "objectID", x } });
